@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/urfave/cli"
-	"BITU-service/core/base"
+	"github.com/sunmi-OS/gocore/utils"
 	"fmt"
 	"time"
 	"github.com/spf13/cast"
@@ -25,8 +25,8 @@ func RunDBWrite(c *cli.Context) error {
 
 	for {
 
-		username := base.GetRandomString(10)
-		password := base.GetRandomString(10)
+		username := utils.GetRandomString(10)
+		password := utils.GetRandomString(10)
 
 		// 随机数据
 		ModelUser.CreateUser(username, password)
@@ -52,7 +52,7 @@ func RunDBRead(c *cli.Context) error {
 
 	for {
 
-		id := base.GetRandomNumeral(5)
+		id := utils.GetRandomNumeral(5)
 
 		// 随机数据
 		ModelUser.GetIdByInfo(cast.ToInt64(id))
