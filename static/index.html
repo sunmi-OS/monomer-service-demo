@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta
+      content="width=device-width,initial-scale=1,user-scalable=no"
+      name="viewport"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no,address=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Demo</title>
+    <style type="text/css">
+      .main {
+        width: 600px;
+        margin: 0 auto;
+        margin-top: 200px;
+        text-align: center;
+      }
+      .form {
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        text-align: center;
+      }
+      .form.hidden {
+        display: none;
+      }
+      .form-item {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+      }
+      .form-item input {
+        width: 200px;
+        padding: 8px 10px;
+      }
+      .form-item button {
+        width: 200px;
+        padding: 8px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <!-- 登录 -->
+      <div class="form" id="login">
+        <div class="form-item"><input type="text" id="login_name" /></div>
+        <div class="form-item"><input type="password" id="login_pwd" /></div>
+        <div class="form-item"><button onclick="doLogin()">登录</button></div>
+        <span onclick="toggleTab('register');">去注册</span>
+      </div>
+      <!-- 注册 -->
+      <div class="form hidden" id="register">
+        <div class="form-item"><input type="text" id="register_name" /></div>
+        <div class="form-item"><input type="password" id="register_pwd" /></div>
+        <div class="form-item">
+          <button onclick="doRegister()">注册</button>
+        </div>
+        <span onclick="toggleTab('login');">去登录</span>
+      </div>
+    </div>
+    <script>
+      var api_server = "//127.0.0.1:1323";
+      var apis = {
+        login: "/login",
+        register: "/registered"
+      };
+      // api请求
+      function request(method, path, params, listeners) {
+        var xhr = new XMLHttpRequest();
+
+        switch (method) {
+          case "GET":
+          default:
+            {
+              if (params) {
+                var query = [];
+                for (key in params) {
+                  query.push(key + "=" + params[key]);
+                }
+                if (listeners) {
+                  xhr.addEventListener(
+                    "progress",
+                    listeners.progress || function() {}
+                  );
+                  xhr.addEventListener("load", listeners.load || function() {});
+                  xhr.addEventListener(
+                    "error",
+                    listeners.error || function() {}
+                  );
+                  xhr.addEventListener(
+                    "abort",
+                    listeners.abort || function() {}
+                  );
+                }
+                xhr.open("GET", path + "?" + query.join("&"));
+                xhr.send();
+              }
+            }
+            break;
+        }
+      }
+      // 登录
+      function doLogin() {
+        var username = document.getElementById("login_name").value;
+        var password = document.getElementById("login_pwd").value;
+        request(
+          "GET",
+          api_server + apis.login,
+          {
+            username: username,
+            password: password
+          },
+          {
+            load: function(e) {
+              var res = JSON.parse(e.target.response || "{}");
+              alert(res.msg);
+            }
+          }
+        );
+      }
+      // 注册
+      function doRegister() {
+        var username = document.getElementById("register_name").value;
+        var password = document.getElementById("register_pwd").value;
+        request(
+          "GET",
+          api_server + apis.register,
+          {
+            username: username,
+            password: password
+          },
+          {
+            load: function(e) {
+              var res = JSON.parse(e.target.response || "{}");
+              alert(res.msg);
+            }
+          }
+        );
+      }
+      // 切换tab
+      function toggleTab(tab) {
+        switch (tab) {
+          case "login":
+            document.getElementById("login").setAttribute("class", "form");
+            document
+              .getElementById("register")
+              .setAttribute("class", "form hidden");
+            document.getElementById("register_name").value;
+            document.getElementById("register_name").value;
+            break;
+          case "register":
+            document
+              .getElementById("login")
+              .setAttribute("class", "form hidden");
+            document.getElementById("register").setAttribute("class", "form");
+            document.getElementById("login_name").value;
+            document.getElementById("login_name").value;
+            break;
+          default:
+            break;
+        }
+      }
+    </script>
+  </body>
+</html>
