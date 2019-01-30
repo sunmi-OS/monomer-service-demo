@@ -39,6 +39,8 @@ func main() {
 	app.Email = "wenzhenxi@sunmi.com"
 	app.Version = version
 
+	app.Action = runAll
+
 	app.Commands = []cli.Command{
 
 		{
@@ -88,6 +90,22 @@ func main() {
 					Name:   "start",
 					Usage:  "所有服务同时运行",
 					Action: runAll,
+				},
+			},
+		}, {
+			Name:    "benchmark",
+			Aliases: []string{"w"},
+			Usage:   "基准测试",
+			Subcommands: []cli.Command{
+				{
+					Name:   "run_db_write",
+					Usage:  "进行数据写入测试",
+					Action: cmd.RunDBWrite,
+				},
+				{
+					Name:   "run_db_read",
+					Usage:  "进行数据读取入测试",
+					Action: cmd.RunDBRead,
 				},
 			},
 		},

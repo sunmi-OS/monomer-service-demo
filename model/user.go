@@ -30,3 +30,10 @@ func (U *User) CreateUser(username, password string) error {
 	return sqlite.GetORM().Create(&user).Error
 
 }
+
+func (U *User) GetIdByInfo(id int64) (User, error) {
+
+	user := User{}
+	return user, sqlite.GetORM().Where("id = ?", id).First(&user).Error
+
+}
